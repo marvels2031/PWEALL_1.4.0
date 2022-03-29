@@ -1,7 +1,7 @@
 Package: PWEALL
 Type: Package
-Version: 1.3.0
-Date: 2018-10-18
+Version: 1.4.0
+Date: 2022-04-10
 Title: Design and Monitoring of Survival Trials Accounting for Complex Situations
 Description: Calculates various functions needed for design and monitoring survival trials
     accounting for complex situations such as delayed treatment effect, treatment crossover, non-uniform accrual,
@@ -11,18 +11,21 @@ Description: Calculates various functions needed for design and monitoring survi
     A bug is corrected in the function "pwecx" that calculates the crossover-adjusted survival, distribution, 
     density, hazard and cumulative hazard functions. 
     Also, to generate the crossover-adjusted event time random variable,  a more efficient 
-    algorithm is used and the output includes crossover indicators. 
+    algorithm is used and the output includes crossover indicators.
+    Additional functions are added to conduct NPH-MCPMod analysis. A vignette file is created to provide a step-by-step tutorial for this. 
 Authors@R: c(
     person(given="Xiaodong", family="Luo", email = "Xiaodong.Luo@sanofi.com", role =c("aut", "cre")),
-    person(given="Xuezhou", family="Mao",  role = "ctb"),
-    person(given="Xun", family="Chen",  role = "ctb"),
-    person(given="Hui", family="Quan",  role = "ctb"),
     person("Sanofi", role = "cph"))
 Depends: R (>= 3.1.2)
 Imports:
     survival,
-    stats
+    stats,
+    splines,
+    splines2
 License: GPL (>= 2)
-RoxygenNote: 5.0.1
+RoxygenNote: 7.1.2
 LazyData: true
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
