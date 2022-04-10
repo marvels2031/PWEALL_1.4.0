@@ -1,0 +1,75 @@
+---
+title: "Introduction and explanation of some functions in `PWEALL'"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction and explanation of some functions in `PWEALL'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PWEALL)
+```
+
+## Define weight function(s)
+The following function can be used to facilitate defining of the weight functions via either T-splines or B-splines.  
+```{r eval=TRUE}
+fun1 <- function(degree=3,inner.knots=c(1,2,2.5),boundary.knots=c(0,6),bt=rep(0,1+degree+length(inner.knots)),base='T',tau=1,type=-1,a=tau,b=1,c=0) {
+  force(degree)
+  force(inner.knots)
+  force(boundary.knots)
+  force(bt)
+  force(base)
+  force(tau)
+  force(type)
+  force(a)
+  force(b)
+  force(c)
+  fun2 <- function(x) {
+    tx=trany(x,tau=tau,type=type,a=a,b=b,c=c)$ty
+    txinner.knots=trany(inner.knots,tau=tau,type=type,a=a,b=b,c=c)$ty
+    txboundary.knots=trany(boundary.knots,tau=tau,type=type,a=a,b=b,c=c)$ty
+    if (base=='T'){
+          XB=tbase(tx,iknots=txinner.knots,lk=txboundary.knots[1],hk=txboundary.knots[2],deg=degree)
+    }
+    else if (base=='B'){
+          XB=splines2::bSpline(tx,knots=txinner.knots, degree=degree,intercept=TRUE,Boundary.knots=txboundary.knots)
+    }
+    XB%*%bt
+  }
+  return(fun2)
+}
+```
+The following code provides an example on how to define the weight functions using the above code. 
+```{r eval=TRUE}
+n.weights=4 #will define 4 weight functions
+degree=3    #with degree of 3
+inner.knots=c(1,2,2.5) #inner.knots
+boundary.knots=c(0,6)  #boundary knots
+np=degree+1+length(inner.knots) #total number of parameters
+btmatrix=matrix(0,nrow=n.weights,ncol=np) #coefficient matrix
+btmatrix[1,]=1
+btmatrix[2,]=rnorm(np)
+btmatrix[3,]=rnorm(np)
+btmatrix[4,]=rnorm(np)
+
+## Define the 4 weight functions
+weightfuns <- vector("list", n.weights)
+for (i in 1:n.weights) {
+  weightfuns[[i]] <- fun1(degree=3,inner.knots=c(1,2,2.5),boundary.knots=c(0,6),bt=btmatrix[i,],base='B')
+}
+
+## Plot the defined weight functions
+xseq=seq(0,6,by=0.1)
+par(mfrow=c(2,2))
+for (i in 1:n.weights){
+plot(x=xseq,y=weightfuns[[i]](xseq),xlab='time',ylab='log HR',main=paste('Weight function',i))
+}
+```
