@@ -49,27 +49,27 @@ fun1 <- function(degree=3,inner.knots=c(1,2,2.5),boundary.knots=c(0,6),bt=rep(0,
 ```
 The following code provides an example on how to define the weight functions using the above code. 
 ```{r eval=TRUE}
-n.weights=4 #will define 4 weight functions
-degree=3    #with degree of 3
-inner.knots=c(1,2,2.5) #inner.knots
-boundary.knots=c(0,6)  #boundary knots
-np=degree+1+length(inner.knots) #total number of parameters
-btmatrix=matrix(0,nrow=n.weights,ncol=np) #coefficient matrix
-btmatrix[1,]=1
-btmatrix[2,]=rnorm(np)
-btmatrix[3,]=rnorm(np)
-btmatrix[4,]=rnorm(np)
+wfunctions=c(1,2,3,4,5,6)
+alpha=c(0.005,0.025)
+onesided=TRUE
+pi1=0.5
 
-## Define the 4 weight functions
-weightfuns <- vector("list", n.weights)
+n.weights=length(wfunctions)
+degree=3
+inner.knots=c(0.5,3,6,10,20)
+boundary.knots=c(0,36)
+np=degree+1+length(inner.knots)
+btmatrix=matrix(0,nrow=n.weights,ncol=np)
+btmatrix[1,1]=1
+btmatrix[2,]=c(-0.03047602,1.466433,0.3813386,-5.616564,0.01741583,13.59455,-16.21707,7.195338,21.47292)
+btmatrix[3,]=c(0.4408064,-0.7547523,1.813175,-2.673851,-6.57252e-13,1.092402,2.334763,-0.7490225,4.920812)
+btmatrix[4,]=c(0.4161905,-0.02885027,0.2652066,-0.299486,2.415845e-13,-1.205081,2.827345, -3.35227,-11.20574)
+btmatrix[5,]=c(0.01057016,-0.01427205,0.1756744,0.01080043,3.552714e-15,-0.210763,2.069093,-2.031769,5.139737)
+btmatrix[6,]=c(0.002961566,0.08252436,3.053774,-4.985592,-1.421085e-14,2.001894,5.431488,-2.260589,-6.868965)
+
+mc.weightfuns <- vector("list", n.weights)
 for (i in 1:n.weights) {
-  weightfuns[[i]] <- fun1(degree=3,inner.knots=c(1,2,2.5),boundary.knots=c(0,6),bt=btmatrix[i,],base='B')
+  mc.weightfuns [[i]] <- fun1(degree=3,inner.knots=inner.knots,boundary.knots=boundary.knots,bt=btmatrix[i,],base='T',type=1,tau=36,a=34/2,b=1,c=0)
 }
 
-## Plot the defined weight functions
-xseq=seq(0,6,by=0.1)
-par(mfrow=c(2,2))
-for (i in 1:n.weights){
-plot(x=xseq,y=weightfuns[[i]](xseq),xlab='time',ylab='log HR',main=paste('Weight function',i))
-}
 ```
