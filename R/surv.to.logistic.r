@@ -8,7 +8,7 @@
 #' @param tcut A constant as the cut-point.
 #' @return A dataframe for logistic regression with z denoting 1/0 outcome, y the (univariate) covariate and yset the offset.
 #' @examples
-#' n1=100;n2=100;n=n1+n0
+#' n1=100;n0=100;n=n1+n0
 #' zz=rep(0,n);zz[1:n1]=1
 #' tt=c(rexp(n1)/0.1,rexp(n0)/0.2)
 #' cc=c(rexp(n1)/0.05,rexp(n0)/0.06)
@@ -21,7 +21,7 @@
 surv.to.logistic=function(y,d,z,tcut=max(y[d==1])){
   abc=PWEALL::wlrutil(y=y,d=d,z=z,te=y)
   aindex=as.numeric(abc$mfunc[,4]>0&abc$mfunc[,5]>0)
-  atemp=rep(0,n)
+  atemp=rep(0,length(y))
   atemp[aindex==1]=log(abc$mfunc[aindex==1,4]/abc$mfunc[aindex==1,5])
   bindex=as.numeric(aindex==1&d==1&y<=tcut)
   ax=cbind(y,d,z,atemp,abc$mfunc[,4],abc$mfunc[,5],abc$mfunc[,6])[bindex==1,]

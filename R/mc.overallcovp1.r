@@ -22,19 +22,17 @@
 #' @param rate40 Hazard after crossover for the control group for complex case.
 #' @param rate50 Hazard after crossover for the control group for complex case.
 #' @param ratec0 Hazard for time to censoring for the control group.
-#' @param tchange A strictly increasing sequence of time points at which the event rates changes. 
-#' The first element of tchange must be zero. It must have the same length as \code{rate11}, \code{rate21}, \code{rate31}, etc.
+#' @param tchange A strictly increasing sequence of time points at which the event rates changes. The first element of tchange must be zero. It must have the same length as \code{rate11}, \code{rate21}, \code{rate31}, etc.
 #' @param type1 Type of crossover in the treatment group.
 #' @param type0 Type of crossover in the control group.
 #' @param rp21 re-randomization prob for the treatment group.
 #' @param rp20 re-randomization prob for the control group.
-#' @param eps A small number representing the error tolerance when calculating the utility function 
-#'  \deqn{\Phi_l(x)=\frac{\int_0^x s^l e^{-s}ds}{x^{l+1}}} with \eqn{l=0,1,2}.
+#' @param eps A small number representing the error tolerance when calculating the utility function \deqn{\Phi_l(x)=\frac{\int_0^x s^l e^{-s}ds}{x^{l+1}}} with \eqn{l=0,1,2}.
 #' @param veps A small number representing the error tolerance when calculating the Fisher information.
-#' @param beta The value at which the covaraince is computed.
-#' @param beta0 The value at which the covaraince is computed.
+#' @param beta The value at which the covariance is computed.
+#' @param beta0 The value at which the covariance is computed.
 #'
-#' @return Returns two integrations at the designated time-points \code{t}. 
+#' @return Returns two integrations at the designated time-points \code{tfix} and \code{tfix0}. 
 #' 
 #' @details
 #' This function is to calculate as covbeta1[j,j']
@@ -62,21 +60,23 @@
 #' btmatrix[4,1:3]=c(1,-1,1)
 #' mc.weightfuns <- vector("list", n.weights)
 #' for (i in 1:n.weights) {
-#'   mc.weightfuns [[i]] <- fun1(degree=3,inner.knots=inner.knots,boundary.knots=boundary.knots,bt=btmatrix[i,],base='T',type=-1,tau=6)
+#'   mc.weightfuns [[i]] <- mc.fun1(degree=3,inner.knots=inner.knots,
+#'   boundary.knots=boundary.knots,bt=btmatrix[i,],base='T',type=-1,tau=6)
 #' }
-#' #Calculate the covariances 
+#' #Calculate the intergrations 
 #' mc.overallcovp1(wfunctions=c(1,2),wfunctions0=c(1,2),tfix = 2, tfix0 = 1)
 #' 
 #' @export
 #'
-mc.overallcovp1=function(wfunctions=c(1,2),wfunctions0=c(1,2),tfix = 2, tfix0 = 1, 
-                taur = 5, u = c(1/taur, 1/taur), ut = c(taur/2, taur), pi1 = 0.5, 
-                rate11 = c(1, 0.5), rate21 = rate11, rate31 = c(0.7, 0.4), 
-                rate41 = rate21, rate51 = rate51, ratec1 = c(0.5, 0.6), 
-                rate10 = rate11, rate20 = rate10, rate30 = rate31, 
-                rate40 = rate20, rate50 = rate20, ratec0 = ratec1, 
-                tchange = c(0, 1), type1 = 1, type0 = 1, rp21 = 0.5, rp20 = 0.5, 
-                eps = 0.01, veps = 0.01, beta = 0, beta0 = 0) 
+mc.overallcovp1=function(wfunctions=c(1,2),wfunctions0=c(1,2),tfix = 2, tfix0 = 1,
+                         taur = 5, u = c(1/taur, 1/taur), ut = c(taur/2, taur), pi1 = 0.5, 
+                         rate11 = c(1, 0.5), rate21 = rate11, rate31 = c(0.7, 0.4), 
+                         rate41 = rate21, rate51 = rate21, ratec1 = c(0.5, 0.6), 
+                         rate10 = rate11, rate20 = rate10, rate30 = rate31, 
+                         rate40 = rate20, rate50 = rate20, ratec0 = ratec1, 
+                         tchange = c(0, 1), type1 = 1, type0 = 1,
+                         rp21 = 0.5, rp20 = 0.5, 
+                         eps = 0.01, veps = 0.01, beta = 0, beta0 = 0) 
 {
     ratemax <- max(abs(rate11 - rate10)) + max(abs(rate21 - rate20)) + 
         max(abs(rate31 - rate30)) + max(abs(rate41 - rate40)) + 

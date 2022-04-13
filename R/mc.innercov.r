@@ -32,7 +32,7 @@
 #' @param veps A small number representing the error tolerance when calculating the Fisher information.
 #' @param beta The value at which the varaince is computed.
 #'
-#' @return Returns two integrations at the designated time-points \code{t}. 
+#' @return Returns integrations at the designated time-points \code{tlow} and \code{tupp}. 
 #' 
 #' @details
 #' This function is to calculate 
@@ -58,7 +58,8 @@
 #' btmatrix[4,1:3]=c(1,-1,1)
 #' mc.weightfuns <- vector("list", n.weights)
 #' for (i in 1:n.weights) {
-#'   mc.weightfuns [[i]] <- fun1(degree=3,inner.knots=inner.knots,boundary.knots=boundary.knots,bt=btmatrix[i,],base='T',type=-1,tau=6)
+#'   mc.weightfuns [[i]] <- mc.fun1(degree=3,inner.knots=inner.knots,
+#'   boundary.knots=boundary.knots,bt=btmatrix[i,],base='T',type=-1,tau=6)
 #' }
 #' #Calculate the intergrations 
 #' mc.innercov(wfunctions=c(1,2),tupp = c(5,6.5), tlow = c(4,4.8))

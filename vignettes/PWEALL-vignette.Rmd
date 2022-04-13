@@ -17,6 +17,9 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(PWEALL)
 ```
+## Scaling leads to faster speed
+Scaling the event rates and/or the times to more manageable scale generally leads to improvement of speed. For example, when we have timeline prediction that has a wide range, say 0 to 120 months, it is usually helpful to first scale to year or even scale it into the unit interval.   
+
 
 ## Define weight function(s)
 The following function can be used to facilitate defining of the weight functions via either T-splines or B-splines.  
